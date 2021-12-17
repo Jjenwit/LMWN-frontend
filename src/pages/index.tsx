@@ -11,6 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 const Header = styled.h1`
@@ -18,11 +19,16 @@ const Header = styled.h1`
   font-size: 3.5em;
   font-weight: 300;
   text-align: center;
+  margin-top: 50px;
+  margin-bottom: 25px;
 `;
 
 const SearchBarWrapper = styled.div`
   width: 30%;
+  margin-bottom: 35px;
 `;
+
+const ItemWrapper = styled.div``;
 
 const HomePage: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -42,9 +48,11 @@ const HomePage: React.FC = () => {
       <SearchBarWrapper>
         <SearchBar />
       </SearchBarWrapper>
-      {trips.map((trip) => (
-        <Item {...trip} key={trip.eid} />
-      ))}
+      <ItemWrapper>
+        {trips.map((trip) => (
+          <Item {...trip} key={trip.eid} />
+        ))}
+      </ItemWrapper>
     </Container>
   );
 };
