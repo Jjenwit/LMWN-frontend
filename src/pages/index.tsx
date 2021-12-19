@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -11,7 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  padding: 50px;
 `;
 
 const Header = styled.h1`
@@ -19,7 +20,15 @@ const Header = styled.h1`
   font-size: 3.5em;
   font-weight: 300;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const HeaderWrapper = styled.div`
   margin-bottom: 25px;
 `;
 
@@ -32,21 +41,36 @@ const ItemWrapper = styled.div``;
 
 const HomePage: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword');
 
   useEffect(() => {
-    axios.get('http://localhost:8081/api/trips').then((res) => {
-      if (res.status === 200) {
-        const { data } = res;
-        setTrips(data);
-      }
-    });
-  }, []);
+    axios
+      .get(
+        'http://localhost:8081/api/trips/' +
+          (keyword ? '?keyword=' + keyword : '')
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          const { data } = res;
+          setTrips(data);
+        }
+      });
+  }, [keyword]);
+
+  const onSearchChange = (newKeyword: string) => {
+    setSearchParams({ keyword: newKeyword });
+  };
 
   return (
     <Container>
-      <Header>เที่ยวไหนดี</Header>
+      <HeaderWrapper>
+        <StyledLink to="/">
+          <Header>เที่ยวไหนดี</Header>
+        </StyledLink>
+      </HeaderWrapper>
       <SearchBarWrapper>
-        <SearchBar />
+        <SearchBar keyword={keyword} onSearchChange={onSearchChange} />
       </SearchBarWrapper>
       <ItemWrapper>
         {trips.map((trip) => (

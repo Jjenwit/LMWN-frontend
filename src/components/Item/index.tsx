@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Trip } from '../../interfaces';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -23,11 +24,20 @@ const Img = styled.img`
   height: 100%;
   width: 100%;
   object-fit: cover;
+  transform: scale(1);
+  transition: 200ms;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const Title = styled.h3`
   margin-top: 0px;
   margin-bottom: 5px;
+
+  &:hover {
+    color: var(--blue);
+  }
 `;
 
 const Description = styled.div`
@@ -46,9 +56,24 @@ const SquareImg = styled.img`
   width: 100px;
   height: 100px;
   object-fit: cover;
+  transform: scale(1);
+  transition: 200ms;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
-const Link = styled.a`
+const TitleLink = styled.a`
+  color: black;
+  border-radius: 15px;
+  text-decoration: none;
+
+  &:visited {
+    color: black;
+  }
+`;
+
+const BlueLink = styled.a`
   color: var(--blue);
 `;
 
@@ -58,7 +83,7 @@ const TagWrapper = styled.div`
   margin-top: 3px;
 `;
 
-const Tag = styled.a`
+const Tag = styled(Link)`
   color: var(--darkGrey);
 `;
 
@@ -76,23 +101,27 @@ const Item: React.FC<Trip> = (props) => {
   extraPhotos.shift(); // Return the array without the first photo
 
   const stringTag = tags.map((tag, i) => (
-    <span>
+    <span key={tag}>
       {i === tags.length - 1 ? ' และ ' : ' '}
-      <Tag href="/">{tag}</Tag>
+      <Tag to={'/?keyword=' + tag}>{tag}</Tag>
     </span>
   ));
 
   return (
     <Container>
       <LeftCol>
-        <Img src={firstPhoto} />
+        <a href={url}>
+          <Img src={firstPhoto} />
+        </a>
       </LeftCol>
       <RightCol>
         <div>
-          <Title>{title}</Title>
+          <TitleLink href={url}>
+            <Title>{title}</Title>
+          </TitleLink>
           <Description>
             {shortenedDesc + ' '}
-            <Link href={url}>อ่านต่อ</Link>
+            <BlueLink href={url}>อ่านต่อ</BlueLink>
             <TagWrapper>
               {'หมวด -'}
               {stringTag}

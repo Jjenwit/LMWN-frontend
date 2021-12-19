@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Input = styled.input`
@@ -19,8 +20,30 @@ const Input = styled.input`
   }
 `;
 
-const SearchBar: React.FC = () => {
-  return <Input placeholder="หาที่เที่ยวแล้วไปกัน..." />;
+interface Props {
+  keyword: string | null;
+  onSearchChange: (newKeyword: string) => void;
+}
+
+const SearchBar: React.FC<Props> = (props) => {
+  const { keyword, onSearchChange } = props;
+  const [q, setQ] = useState<string>(keyword || '');
+  useEffect(() => {
+    setQ(keyword || '');
+  }, [keyword]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQ(e.target.value);
+    onSearchChange(e.target.value);
+  };
+
+  return (
+    <Input
+      placeholder="หาที่เที่ยวแล้วไปกัน..."
+      value={q}
+      onChange={onChange}
+    />
+  );
 };
 
 export default SearchBar;
